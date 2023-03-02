@@ -12,9 +12,9 @@ def load_dataset(data_dir, sep_token: str, eos_token: str):
     if not os.path.exists(data_dir):
         os.mkdir(data_dir)
 
-    for file in os.listdir(data_dir):
+    for file in os.listdir(data_dir)[1:2]:
         if file.endswith('json'):
-            with open(f'{data_dir}{file}')as f:
+            with open(f'{data_dir}{file}', encoding='utf-8')as f:
                 file_datas = json.load(f)
             print(f'======= {file} =======')
             for file_data in tqdm(file_datas['data']):
