@@ -64,9 +64,9 @@ class DialogueDataset(Dataset):
 def collate_fn(batch, pad_token_id):
     def seq_length_(p):
         return len(p[0])
-    # print(f'batch : {type(batch)}')  
-    # print(f'pad_token_id : {pad_token_id}')         
-    # print(f'seq_length : {seq_length_}')
+    print(f'batch : {type(batch)}')  
+    print(f'pad_token_id : {pad_token_id}')         
+    print(f'seq_length : {seq_length_}')
     max_seq_sample = max(batch, key=seq_length_)[0]
     max_seq_size = len(max_seq_sample)
 
