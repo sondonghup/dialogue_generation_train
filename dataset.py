@@ -94,7 +94,7 @@ def collate_fn(batch, pad_token_id):
         y = torch.empty_like(x).copy_(x)
         -> y에 gradient가 흐를수 있음
         y = torch.tensor(x)
-        -> 명확하고 빠른 방법
+        -> 명확하고 빠른 방법. 
         '''
 
         input_ids[idx].narrow(0, 0, len(sample_input_ids)).copy_(torch.LongTensor(sample_input_ids))
