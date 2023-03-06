@@ -27,7 +27,7 @@ def main(parser):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f'device : {device}')
     tokenizer = AutoTokenizer.from_pretrained(args.pretrained_model,
-                                                bos_token = '</s>',
+                                                bos_token = '<s>',
                                                 eos_token = '</s>',
                                                 unk_token = '<unk>',
                                                 pad_token = '<pad>',
