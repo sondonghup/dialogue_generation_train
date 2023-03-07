@@ -47,7 +47,7 @@ class DGTrainer:
 
         self.model.train()
 
-        print(f'model_config : {self.model}')
+        # print(f'model_config : {self.model}')
 
         for step, (input_ids, attention_masks, targets) in enumerate(tqdm(self.train_loader)):
             input_ids = input_ids.to(self.device)

@@ -111,7 +111,7 @@ if __name__ == "__main__":
     parser.add_argument('-v', '--valid_dir', type = str, default='/content/drive/MyDrive/gpt2/kakao_chat/Validation/')
     parser.add_argument('-d', '--save_dir', type = str, default='/content/drive/MyDrive/gpt2_checkpoints/checkpoints')
     parser.add_argument('-w', '--num_workers', type = int, default=4)
-    parser.add_argument('-b', '--batch_size', type = int, default=8)
+    parser.add_argument('-b', '--batch_size', type = int, default=10)
     parser.add_argument('-l', '--learning_rate', type = float, default=3e-5)
     parser.add_argument('-e', '--num_epochs', type = int, default=5)
     parser.add_argument('-g', '--gradient_clip_val', type = float, default=1.0 )

@@ -47,9 +47,9 @@ def load_dataset(menu, data_dir, sep_token: str, eos_token: str):
             if file.endswith('txt'):
                 print(f'======= {file} =======')
                 with open(f'{data_dir}{file}', encoding='utf-8')as f:
-                    dialogue_list = [line for line in f]
+                    dialogue_list = [line.split(':')[1].strip() for line in f]
                     dialogue_list = dialogue_list[4:]
-                    for i in range(1, dialogue_list / 10, 1):
+                    for i in range(1, int(len(dialogue_list) / 10), 1):
                         utterances = sep_token.join(dialogue_list[4+(i - 1)*10 : i*10]) + eos_token
                         all_utterances.append(utterances)
 
