@@ -98,8 +98,9 @@ class DGTrainer:
                 date_time = time.strftime("%Y_%m_%d_%H_%M", time.localtime())
 
                 os.mkdir(os.path.join(self.save_dir, date_time))
-                torch.save(self.model, os.path.join(self.save_dir, date_time, 'model.pt'))
-                self.model.to_json_file(os.path.join(self.save_dir, date_time, 'config.json')))
+                self.model.save_pretrained(os.path.join(self.save_dir, date_time, 'model.pt'))
+                # torch.save(self.model, os.path.join(self.save_dir, date_time, 'model.pt'))
+                # self.model.to_json_file(os.path.join(self.save_dir, date_time, 'config.json'))
 
     def _validate(self, epoch):
         total_loss = 0.0

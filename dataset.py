@@ -103,9 +103,9 @@ def collate_fn(batch, pad_token_id, bos_token_id):
 
     batch_size = len(batch)
 
-    input_ids = torch.zeros(batch_size, max_seq_size).fill_(pad_token_id).long()
-    attention_masks = torch.zeros(batch_size, max_seq_size).fill_(bos_token_id).long()
-    labels = torch.zeros(batch_size, max_seq_size).fill_(pad_token_id).long()
+    input_ids = torch.zeros(batch_size, max_seq_size).fill_(0).long()
+    attention_masks = torch.zeros(batch_size, max_seq_size).fill_(0).long()
+    labels = torch.zeros(batch_size, max_seq_size).fill_(0).long()
     # input_ids = torch.full((batch_size, max_seq_size), pad_token_id).long()
     # attention_masks = torch.full((batch_size, max_seq_size), pad_token_id).long()
     # labels = torch.full((batch_size, max_seq_size), pad_token_id).long()

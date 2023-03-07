@@ -52,13 +52,13 @@ def main(parser):
 
     model = GPT2LMHeadModel.from_pretrained(args.pretrained_model)
     model.resize_token_embeddings(len(tokenizer)) # 변경된 토큰의 수만큼 임베딩을 변경
-    model = nn.DataParallel(model).to(device)
+    # model = nn.DataParallel(model).to(device)
     model = model.to(device)
 
     train_datasets = load_dataset(args.menu, args.train_dir, '<sep>', '</s>')
     train_dataset = DialogueDataset(train_datasets, tokenizer)
     valid_datasets = load_dataset(args.menu, args.valid_dir, '<sep>', '</s>')
-    valid_dataset = DialogueDataset(valid_datasets, tokenizer)
+    valid_dataset = DialogueDataset(valid_datasets[:100], tokenizer)
 
     print(f"batch_size : {args.batch_size}")
 
@@ -100,16 +100,12 @@ def main(parser):
     ).fit()
     
 
-
-
-    return datasets
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--pretrained_model', type=str, default='skt/kogpt2-base-v2')
+    parser.add_argument('-p', '--pretrained_model', type=str, default='gpt2')
     parser.add_argument('-t', '--train_dir', type = str, default='/content/drive/MyDrive/gpt2/kakao_chat/Training/')
     parser.add_argument('-v', '--valid_dir', type = str, default='/content/drive/MyDrive/gpt2/kakao_chat/Validation/')
-    parser.add_argument('-d', '--save_dir', type = str, default='/content/drive/MyDrive/gpt2_checkpoints/checkpoints')
+    parser.add_argument('-d', '--save_dir', type = str, default='/content/drive/MyDrive/gpt2_checkpoints/gpt2_checkpoints')
     parser.add_argument('-w', '--num_workers', type = int, default=4)
     parser.add_argument('-b', '--batch_size', type = int, default=10)
     parser.add_argument('-l', '--learning_rate', type = float, default=3e-5)
