@@ -6,39 +6,54 @@ import torch
 from tqdm import tqdm
 from torch.utils.data import Dataset
 
-def load_dataset(data_dir, sep_token: str, eos_token: str):
-    all_utterances = list()
+def load_dataset(menu, data_dir, sep_token: str, eos_token: str):
+    if menu == 'ai':
+        all_utterances = list()
 
-    if not os.path.exists(data_dir):
-        os.mkdir(data_dir)
+        if not os.path.exists(data_dir):
+            os.mkdir(data_dir)
 
-    for file in os.listdir(data_dir):
-        if file.endswith('json'):
-            with open(f'{data_dir}{file}', encoding='utf-8')as f:
-                file_datas = json.load(f)
-            print(f'======= {file} =======')
-            for file_data in tqdm(file_datas['data']):
-                participant_id = None
-                utterances = str()
+        for file in os.listdir(data_dir):
+            if file.endswith('json'):
+                with open(f'{data_dir}{file}', encoding='utf-8')as f:
+                    file_datas = json.load(f)
+                print(f'======= {file} =======')
+                for file_data in tqdm(file_datas['data']):
+                    participant_id = None
+                    utterances = str()
 
-                if file_data['header']['dialogueInfo']['numberOfParticipants'] != 2:
-                    continue
-                
-                for utterance in file_data['body']:
-                    if participant_id is None:
-                        utterances += utterance['utterance']
-                    elif participant_id == utterance['participantID']:
-                        utterances += ' ' + utterance['utterance']
-                    else:
-                        utterances += sep_token + utterance['utterance']
+                    if file_data['header']['dialogueInfo']['numberOfParticipants'] != 2:
+                        continue
                     
-                    participant_id = utterance['participantID']
-                utterances += eos_token
-                all_utterances.append(utterances)
+                    for utterance in file_data['body']:
+                        if participant_id is None:
+                            utterances += utterance['utterance']
+                        elif participant_id == utterance['participantID']:
+                            utterances += ' ' + utterance['utterance']
+                        else:
+                            utterances += sep_token + utterance['utterance']
+                        
+                        participant_id = utterance['participantID']
+                    utterances += eos_token
+                    all_utterances.append(utterances)
 
-        
+        return all_utterances
+    
 
-    return all_utterances
+    if menu == 'kakao':
+        dialogue_list = []
+        all_utterances = []
+        for file in os.listdir(data_dir):
+            if file.endswith('txt'):
+                print(f'======= {file} =======')
+                with open(f'{data_dir}{file}', encoding='utf-8')as f:
+                    dialogue_list = [line for line in f]
+                    dialogue_list = dialogue_list[4:]
+                    for i in range(1, dialogue_list / 10, 1):
+                        utterances = sep_token.join(dialogue_list[4+(i - 1)*10 : i*10]) + eos_token
+                        all_utterances.append(utterances)
+
+        return all_utterances
 
 class DialogueDataset(Dataset):
     def __init__(self, datas, tokenizer) -> None:
@@ -73,17 +88,11 @@ class DialogueDataset(Dataset):
 def collate_fn(batch, pad_token_id, bos_token_id):
     def seq_length_(p):
         return len(p[0])
-<<<<<<< HEAD
 
     # print(f'batch : {type(batch)}')  
     # print(f'pad_token_id : {pad_token_id}')         
     # print(f'seq_length : {seq_length_}')
 
-=======
-    print(f'batch : {type(batch)}')  
-    print(f'pad_token_id : {pad_token_id}')         
-    print(f'seq_length : {seq_length_}')
->>>>>>> 9934495a98fd2afd61bb12cf26103259be85a764
     max_seq_sample = max(batch, key=seq_length_)[0]
     max_seq_size = len(max_seq_sample)
 

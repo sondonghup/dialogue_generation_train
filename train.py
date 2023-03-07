@@ -18,9 +18,9 @@ def main(parser):
     wandb.init(project = 'dialogue generation')
 
     torch.manual_seed(42)
-    # torch.backends.cudnn.benchmark = False # cudnn은 convolution을 수행하는 과정에서 가장 적합한 알고리즘을 선정해 수행
-    # torch.backends.cudnn.determinitic = True # 
-    # torch.use_deterministic_algorithms(True)
+    torch.backends.cudnn.benchmark = False # cudnn은 convolution을 수행하는 과정에서 가장 적합한 알고리즘을 선정해 수행
+    torch.backends.cudnn.determinitic = True # 
+    torch.use_deterministic_algorithms(True)
     np.random.seed(42)
     random.seed(42)
 
@@ -29,10 +29,7 @@ def main(parser):
     print(f'num_workers : {args.num_workers}')
     print(f'learning_rate : {args.learning_rate}')
     tokenizer = AutoTokenizer.from_pretrained(args.pretrained_model,
-<<<<<<< HEAD
                                                 pad_token = '<pad>',
-=======
->>>>>>> 9934495a98fd2afd61bb12cf26103259be85a764
                                                 bos_token = '<s>',
                                                 eos_token = '</s>',
                                                 unk_token = '<unk>',
@@ -58,9 +55,9 @@ def main(parser):
     model = nn.DataParallel(model).to(device)
     model = model.to(device)
 
-    train_datasets = load_dataset(args.train_dir, '<sep>', '</s>')
+    train_datasets = load_dataset(args.menu, args.train_dir, '<sep>', '</s>')
     train_dataset = DialogueDataset(train_datasets, tokenizer)
-    valid_datasets = load_dataset(args.valid_dir, '<sep>', '</s>')
+    valid_datasets = load_dataset(args.menu, args.valid_dir, '<sep>', '</s>')
     valid_dataset = DialogueDataset(valid_datasets, tokenizer)
 
     print(f"batch_size : {args.batch_size}")
@@ -121,8 +118,6 @@ if __name__ == "__main__":
     parser.add_argument('-o', '--log_every', type=int, default=20)
     parser.add_argument('-a', '--accumulate_grad_batches', type = int, default=1)
     parser.add_argument('-s', '--save_every', type=int, default=10_000)
+    parser.add_argument('-m', '--menu', type=str, default='kakao')
 
     datasets = main(parser)
-    # for train_dataset in datasets['train']:
-    #     print(train_dataset)
-    #     input()    
