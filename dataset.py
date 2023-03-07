@@ -12,7 +12,7 @@ def load_dataset(data_dir, sep_token: str, eos_token: str):
     if not os.path.exists(data_dir):
         os.mkdir(data_dir)
 
-    for file in os.listdir(data_dir)[1:2]:
+    for file in os.listdir(data_dir):
         if file.endswith('json'):
             with open(f'{data_dir}{file}', encoding='utf-8')as f:
                 file_datas = json.load(f)
@@ -36,6 +36,8 @@ def load_dataset(data_dir, sep_token: str, eos_token: str):
                 utterances += eos_token
                 all_utterances.append(utterances)
 
+        
+
     return all_utterances
 
 class DialogueDataset(Dataset):
@@ -50,9 +52,16 @@ class DialogueDataset(Dataset):
 
         for data in tqdm(datas):
             encode_data = self.tokenizer(data, truncation = True, max_length = tokenizer.model_max_length)
+            # print(f'encode_data : {encode_data}')
+
             self.input_ids.append(encode_data['input_ids'])
             self.attention_mask.append(encode_data['attention_mask'])
             self.labels.append(encode_data['input_ids'])
+            # print(f'data : {data}')
+            # print(f'input_ids : {self.input_ids[-1]}')
+            # print(f'attention_mask : {self.attention_mask[-1]}')
+            # print(f'labels : {self.labels[-1]}')
+            # input()
 
 
     def __len__(self):
@@ -61,19 +70,21 @@ class DialogueDataset(Dataset):
     def __getitem__(self, index):
         return self.input_ids[index], self.attention_mask[index], self.labels[index]
 
-def collate_fn(batch, pad_token_id):
+def collate_fn(batch, pad_token_id, bos_token_id):
     def seq_length_(p):
         return len(p[0])
+
     # print(f'batch : {type(batch)}')  
     # print(f'pad_token_id : {pad_token_id}')         
     # print(f'seq_length : {seq_length_}')
+
     max_seq_sample = max(batch, key=seq_length_)[0]
     max_seq_size = len(max_seq_sample)
 
     batch_size = len(batch)
 
     input_ids = torch.zeros(batch_size, max_seq_size).fill_(pad_token_id).long()
-    attention_masks = torch.zeros(batch_size, max_seq_size).fill_(pad_token_id).long()
+    attention_masks = torch.zeros(batch_size, max_seq_size).fill_(bos_token_id).long()
     labels = torch.zeros(batch_size, max_seq_size).fill_(pad_token_id).long()
     # input_ids = torch.full((batch_size, max_seq_size), pad_token_id).long()
     # attention_masks = torch.full((batch_size, max_seq_size), pad_token_id).long()
@@ -84,6 +95,12 @@ def collate_fn(batch, pad_token_id):
         sample_input_ids = sample[0]
         sample_attention_masks = sample[1]
         sample_labels = sample[2]
+
+        # print(f'sample_input_ids : {sample_input_ids}')  
+        # print(f'sample_attention_masks : {sample_attention_masks}')         
+        # print(f'sample_labels : {sample_labels}')
+
+        # input()
 
         '''
         y = tensor.new_tensor(x, requires_grad = True)

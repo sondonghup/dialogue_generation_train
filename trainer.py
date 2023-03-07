@@ -47,32 +47,35 @@ class DGTrainer:
 
         self.model.train()
 
+        print(f'model_config : {self.model}')
+
         for step, (input_ids, attention_masks, targets) in enumerate(tqdm(self.train_loader)):
             input_ids = input_ids.to(self.device)
             attention_masks = attention_masks.to(self.device)
             targets = targets.to(self.device)
 
-            print(f'\n\ninput_ids : {input_ids.size()}')
-            print(f'attention_masks : {attention_masks.size()}')
-            print(f'targets : {targets.size()}')
+            # print(f'\n\ninput_ids : {input_ids.size()}')
+            # print(f'attention_masks : {attention_masks.size()}')
+            # print(f'targets : {targets.size()}')
 
-            print(f'input_ids : {input_ids[0]}')
-            print(f'attention_masks : {attention_masks[0]}')
-            print(f'targets : {targets[0]}')
+            # print(f'input_ids : {input_ids[0]}')
+            # print(f'attention_masks : {attention_masks[0]}')
+            # print(f'targets : {targets[0]}')
 
+            torch.autograd.set_detect_anomaly(True)
 
             outputs = self.model(input_ids = input_ids, attention_mask = attention_masks, labels = targets)
             loss = outputs.loss / self.accumulate_grad_batches
-            print(f'\noutputs.loss : {outputs.loss}')
-            print(f'self.accumulate_grad_batches : {self.accumulate_grad_batches}')
-            print(f'loss : {loss}')
+            # print(f'\noutputs.loss : {outputs.loss}')
+            # print(f'self.accumulate_grad_batches : {self.accumulate_grad_batches}')
+            # print(f'loss : {loss}')
             self.optimizer.zero_grad()
             loss.backward()
             
-            print(f'loss.item : {loss.item}')
+            # print(f'loss.item : {loss.item}')
             total_loss += loss.item()
             
-            print(f'total_loss : {total_loss}')
+            # print(f'total_loss : {total_loss}')
 
             if step % self.accumulate_grad_batches == 0:
                 torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.gradient_clip_val)
@@ -82,8 +85,7 @@ class DGTrainer:
             if step % self.log_every == 0:
                 train_mean_loss = total_loss / (step + 1)
                 
-                print(f'train_mean_loss : {train_mean_loss}')
-                input()
+                # print(f'train_mean_loss : {train_mean_loss}')
                 wandb.log({
                     "lr" : self._get_lr(),
                     "train_loss" : train_mean_loss,
