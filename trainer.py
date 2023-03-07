@@ -99,6 +99,7 @@ class DGTrainer:
 
                 os.mkdir(os.path.join(self.save_dir, date_time))
                 torch.save(self.model, os.path.join(self.save_dir, date_time, 'model.pt'))
+                self.model.to_json_file(os.path.join(self.save_dir, date_time, 'config.json')))
 
     def _validate(self, epoch):
         total_loss = 0.0
