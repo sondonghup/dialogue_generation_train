@@ -73,11 +73,17 @@ class DialogueDataset(Dataset):
 def collate_fn(batch, pad_token_id, bos_token_id):
     def seq_length_(p):
         return len(p[0])
+<<<<<<< HEAD
 
     # print(f'batch : {type(batch)}')  
     # print(f'pad_token_id : {pad_token_id}')         
     # print(f'seq_length : {seq_length_}')
 
+=======
+    print(f'batch : {type(batch)}')  
+    print(f'pad_token_id : {pad_token_id}')         
+    print(f'seq_length : {seq_length_}')
+>>>>>>> 9934495a98fd2afd61bb12cf26103259be85a764
     max_seq_sample = max(batch, key=seq_length_)[0]
     max_seq_size = len(max_seq_sample)
 
@@ -111,7 +117,7 @@ def collate_fn(batch, pad_token_id, bos_token_id):
         y = torch.empty_like(x).copy_(x)
         -> y에 gradient가 흐를수 있음
         y = torch.tensor(x)
-        -> 명확하고 빠른 방법
+        -> 명확하고 빠른 방법. 
         '''
 
         input_ids[idx].narrow(0, 0, len(sample_input_ids)).copy_(torch.LongTensor(sample_input_ids))

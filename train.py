@@ -29,7 +29,10 @@ def main(parser):
     print(f'num_workers : {args.num_workers}')
     print(f'learning_rate : {args.learning_rate}')
     tokenizer = AutoTokenizer.from_pretrained(args.pretrained_model,
+<<<<<<< HEAD
                                                 pad_token = '<pad>',
+=======
+>>>>>>> 9934495a98fd2afd61bb12cf26103259be85a764
                                                 bos_token = '<s>',
                                                 eos_token = '</s>',
                                                 unk_token = '<unk>',
