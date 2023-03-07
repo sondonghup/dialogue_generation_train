@@ -107,8 +107,8 @@ def main(parser):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--pretrained_model', type=str, default='skt/kogpt2-base-v2')
-    parser.add_argument('-t', '--train_dir', type = str, default='/content/drive/MyDrive/gpt2/한국어 SNS/Training/[라벨]한국어SNS_train/')
-    parser.add_argument('-v', '--valid_dir', type = str, default='/content/drive/MyDrive/gpt2/한국어 SNS/Validation/[라벨]한국어SNS_valid/')
+    parser.add_argument('-t', '--train_dir', type = str, default='/content/drive/MyDrive/gpt2/kakao_chat/Training/')
+    parser.add_argument('-v', '--valid_dir', type = str, default='/content/drive/MyDrive/gpt2/kakao_chat/Validation/')
     parser.add_argument('-d', '--save_dir', type = str, default='/content/drive/MyDrive/gpt2_checkpoints/checkpoints')
     parser.add_argument('-w', '--num_workers', type = int, default=4)
     parser.add_argument('-b', '--batch_size', type = int, default=8)
